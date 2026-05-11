@@ -483,11 +483,24 @@ h1 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.category-list.masonry-layout {
+  display: block;
+  column-count: 2;
+  column-gap: 16px;
+}
+
 .category-card {
   padding: 18px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 120px),
     var(--panel);
+}
+
+.category-list.masonry-layout .category-card {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 16px;
+  break-inside: avoid;
 }
 
 .category-header {
@@ -692,6 +705,10 @@ h1 {
 
   .category-list {
     grid-template-columns: 1fr;
+  }
+
+  .category-list.masonry-layout {
+    column-count: 1;
   }
 }
 

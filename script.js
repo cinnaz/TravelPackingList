@@ -509,6 +509,7 @@ function render() {
   renderShell();
   renderStats();
   elements.listContainer.innerHTML = "";
+  elements.listContainer.classList.toggle("masonry-layout", !state.showRemainingOnly);
 
   if (state.showRemainingOnly) {
     renderRemainingView();
