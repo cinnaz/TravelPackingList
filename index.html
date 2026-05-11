@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Travel Packing List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="appShell" class="page-shell">
+      <header class="hero-card">
+        <div class="hero-content">
+          <p class="eyebrow">Travel planner</p>
+          <h1>🧳 Packing List</h1>
+          <div class="hero-stats">
+            <div class="stat">
+              <span class="stat-label">Packed</span>
+              <strong id="packedCount">0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total</span>
+              <strong id="totalCount">0</strong>
+            </div>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <section class="account-panel">
+            <div class="account-chip">
+              <div class="account-chip-header">
+                <div class="account-copy">
+                  <span id="accountLabel" class="stat-label">Guest mode</span>
+                  <strong id="accountEmail">Default list only</strong>
+                </div>
+                <button id="accountToggleButton" class="secondary-button" type="button">
+                  Log in
+                </button>
+              </div>
+              <p id="accountHelperCopy" class="hero-copy">
+                Log in or create an account to customize and save your packing list.
+              </p>
+            </div>
+          </section>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <section class="panel panel-wide">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Checklist</p>
+              <h2 id="listTitle">Packing categories</h2>
+            </div>
+            <div class="panel-actions">
+              <button id="newTripButton" class="secondary-button" type="button">
+                New trip
+              </button>
+              <button id="addCategoryButton" class="secondary-button" type="button">
+                Add new category
+              </button>
+              <button id="toggleViewButton" class="chip-button" type="button">
+                Show remaining only
+              </button>
+              <button
+                id="restoreDefaultsButton"
+                class="danger-button"
+                type="button"
+              >
+                Restore default list
+              </button>
+            </div>
+          </div>
+          <div id="listContainer" class="category-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div id="accountModalBackdrop" class="modal-backdrop hidden"></div>
+    <div
+      id="accountPanelBody"
+      class="account-modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="authPanelTitle"
+    >
+      <div class="account-modal-card">
+        <div class="account-modal-header">
+          <div class="account-panel-copy">
+            <p class="panel-kicker">Account</p>
+            <h2 id="authPanelTitle">Save your custom list</h2>
+          </div>
+          <button id="accountCloseButton" class="secondary-button" type="button">
+            Close
+          </button>
+        </div>
+
+        <div id="guestCallout" class="guest-callout">
+          <p>
+            Guest changes reset to the default list when you come back.
+            Create an account only if you want to save custom trips.
+          </p>
+        </div>
+
+        <form id="authForm" class="stack-form">
+          <label class="field">
+            <span>Email</span>
+            <input
+              id="emailInput"
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input
+              id="passwordInput"
+              name="password"
+              type="password"
+              placeholder="At least 6 characters"
+              autocomplete="current-password"
+              minlength="6"
+            />
+          </label>
+          <div class="auth-actions">
+            <button id="createAccountButton" class="primary-button" type="button">
+              Create account
+            </button>
+            <button id="signInButton" class="secondary-button" type="submit">
+              Sign in
+            </button>
+          </div>
+          <p id="authMessage" class="auth-message" aria-live="polite"></p>
+        </form>
+
+        <div id="signedInPanel" class="signed-in-panel hidden">
+          <p class="auth-footnote">
+            Your custom categories, item edits, and packing progress are being
+            saved to this account on this device.
+          </p>
+          <button id="signOutButton" class="secondary-button" type="button">
+            Sign out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="categoryModalBackdrop" class="modal-backdrop hidden"></div>
+    <div
+      id="categoryModal"
+      class="account-modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="categoryModalTitle"
+    >
+      <div class="account-modal-card">
+        <div class="account-modal-header">
+          <div class="account-panel-copy">
+            <p class="panel-kicker">Create</p>
+            <h2 id="categoryModalTitle">Add new category</h2>
+          </div>
+          <button id="categoryCloseButton" class="secondary-button" type="button">
+            Close
+          </button>
+        </div>
+
+        <form id="categoryModalForm" class="stack-form">
+          <label class="field">
+            <span>Category name</span>
+            <input
+              id="categoryModalInput"
+              name="categoryName"
+              type="text"
+              placeholder="Beach day"
+              maxlength="60"
+              required
+            />
+          </label>
+          <div class="auth-actions">
+            <button class="primary-button" type="submit">Add category</button>
+            <button id="categoryCancelButton" class="secondary-button" type="button">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="confirmModalBackdrop" class="modal-backdrop hidden"></div>
+    <div
+      id="confirmModal"
+      class="account-modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirmModalTitle"
+    >
+      <div class="account-modal-card confirm-modal-card">
+        <div class="account-modal-header">
+          <div class="account-panel-copy">
+            <p class="panel-kicker">Confirm</p>
+            <h2 id="confirmModalTitle">Delete item?</h2>
+          </div>
+          <button id="confirmCloseButton" class="secondary-button" type="button">
+            Close
+          </button>
+        </div>
+        <p id="confirmModalMessage" class="auth-footnote"></p>
+        <div class="auth-actions">
+          <button id="confirmActionButton" class="danger-button" type="button">
+            Delete
+          </button>
+          <button id="confirmCancelButton" class="secondary-button" type="button">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <template id="categoryTemplate">
+      <section class="category-card">
+        <div class="category-header">
+          <h3></h3>
+          <button class="icon-button delete-category" type="button" aria-label="Delete category">
+            ×
+          </button>
+        </div>
+        <div class="category-items"></div>
+        <form class="category-add-form hidden">
+          <input
+            class="category-add-input"
+            type="text"
+            placeholder="Add a new item"
+            maxlength="80"
+          />
+          <div class="category-add-actions">
+            <button class="primary-button category-save-button" type="submit">
+              Save
+            </button>
+            <button class="secondary-button category-cancel-button" type="button">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
+    </template>
+
+    <template id="itemTemplate">
+      <div class="item-row">
+        <div class="item-main">
+          <input class="item-checkbox" type="checkbox" />
+          <span class="item-name"></span>
+        </div>
+        <button class="icon-button delete-item" type="button" aria-label="Delete item">
+          ×
+        </button>
+      </div>
+    </template>
+
+    <template id="remainingTemplate">
+      <div class="remaining-row">
+        <input class="item-checkbox" type="checkbox" />
+        <span class="item-name"></span>
+        <span class="item-category"></span>
+      </div>
+    </template>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
